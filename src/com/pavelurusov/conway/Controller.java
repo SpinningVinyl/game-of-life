@@ -2,9 +2,13 @@ package com.pavelurusov.conway;
 
 import com.pavelurusov.squaregrid.SquareGrid;
 import javafx.animation.AnimationTimer;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -26,12 +30,17 @@ public class Controller {
     public Label frameLabel;
     @FXML
     public Button rewindButton;
+    @FXML
+    public Button loadButton;
+    @FXML
+    public Button saveButton;
 
     private boolean[][] board;
     private final List<boolean[][]> frames = new ArrayList<>();
 
     private int currentFrame;
     private boolean isRunning = false;
+    BooleanProperty runningProperty = new SimpleBooleanProperty();
 
     private AnimationTimer timer;
 
@@ -48,8 +57,33 @@ public class Controller {
         display.setAutomaticRedraw(false);
         root.setCenter(display);
 
+        root.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.KP_RIGHT) {
+                advanceButton.fire();
+            } else if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.KP_LEFT) {
+                rewindButton.fire();
+            } else if (e.getCode() == KeyCode.ENTER) {
+                startStopButton.fire();
+            } else if (e.getCode() == KeyCode.O) {
+                loadButton.fire();
+            } else if (e.getCode() == KeyCode.S) {
+                saveButton.fire();
+            }
+        });
+
         display.setOnMouseClicked(this::setCells);
         display.setOnMouseDragged(this::setCells);
+
+        startStopButton.setTooltip(new Tooltip("or press Enter"));
+        advanceButton.setTooltip(new Tooltip("or press →"));
+        rewindButton.setTooltip(new Tooltip("or press ←"));
+        loadButton.setTooltip(new Tooltip("or press O"));
+        saveButton.setTooltip(new Tooltip("or press S"));
+
+        advanceButton.disableProperty().bind(runningProperty);
+        rewindButton.disableProperty().bind(runningProperty);
+        loadButton.disableProperty().bind(runningProperty);
+        saveButton.disableProperty().bind(runningProperty);
 
         timer = new AnimationTimer() {
             long lastFrameTime;
@@ -64,6 +98,7 @@ public class Controller {
 
         startStopButton.setOnAction(e -> {
             isRunning = !isRunning;
+            runningProperty.set(isRunning);
             if (isRunning) {
                 timer.start();
             } else {
@@ -154,7 +189,7 @@ public class Controller {
 
     public void saveBoard() {
         FileChooser chooser = new FileChooser();
-        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("jLife board", "*.jlbrd"));
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("jLife pattern", "*.jlbrd"));
         File saveFile = chooser.showSaveDialog(root.getScene().getWindow());
         if (saveFile != null) {
             try(FileWriter fw = new FileWriter(saveFile);
@@ -174,7 +209,7 @@ public class Controller {
 
     public void loadBoard() {
         FileChooser chooser = new FileChooser();
-        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("jLife board", "*.jlbrd"));
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("jLife pattern", "*.jlbrd"));
         File openFile = chooser.showOpenDialog(root.getScene().getWindow());
         if (openFile != null) {
             String input;
