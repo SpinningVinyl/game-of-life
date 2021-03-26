@@ -70,16 +70,14 @@ public class Controller {
                 timer.stop();
             }
         });
-
     }
 
     private void visualize() {
+        display.fill(null);
         for (int row = 0; row < settings.ROWS; row++) {
             for (int column = 0; column < settings.COLUMNS; column++) {
                 if(board[row][column]) {
                     display.setCellColor(row, column, settings.COLOR_ALIVE);
-                } else {
-                    display.setCellColor(row, column, null);
                 }
             }
         }
