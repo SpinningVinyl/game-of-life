@@ -64,7 +64,7 @@ public class Controller {
                 rewindButton.fire();
             } else if (e.getCode() == KeyCode.ENTER) {
                 startStopButton.fire();
-            } else if (e.getCode() == KeyCode.O) {
+            } else if (e.getCode() == KeyCode.L) {
                 loadButton.fire();
             } else if (e.getCode() == KeyCode.S) {
                 saveButton.fire();
@@ -74,11 +74,11 @@ public class Controller {
         display.setOnMouseClicked(this::setCells);
         display.setOnMouseDragged(this::setCells);
 
-        startStopButton.setTooltip(new Tooltip("or press Enter"));
-        advanceButton.setTooltip(new Tooltip("or press →"));
-        rewindButton.setTooltip(new Tooltip("or press ←"));
-        loadButton.setTooltip(new Tooltip("or press O"));
-        saveButton.setTooltip(new Tooltip("or press S"));
+        startStopButton.setTooltip(new Tooltip("[Enter]"));
+        advanceButton.setTooltip(new Tooltip("[→]"));
+        rewindButton.setTooltip(new Tooltip("[←]"));
+        loadButton.setTooltip(new Tooltip("[L]"));
+        saveButton.setTooltip(new Tooltip("[S]"));
 
         advanceButton.disableProperty().bind(runningProperty);
         rewindButton.disableProperty().bind(runningProperty);
@@ -105,7 +105,7 @@ public class Controller {
                 timer.stop();
             }
         });
-    }
+    } // end of initialize()
 
     private void visualize() {
         display.fill(null);
@@ -116,7 +116,7 @@ public class Controller {
                 }
             }
         }
-    }
+    } // end of visualize()
 
     private void updateFrameCounter() {
         frameLabel.setText("Frame: " + currentFrame);
@@ -134,7 +134,7 @@ public class Controller {
             visualize();
             display.redraw();
         }
-    }
+    } // end of setCells()
 
     public void rewind() {
         if (!isRunning && !frames.isEmpty()) {
@@ -144,7 +144,7 @@ public class Controller {
             updateFrameCounter();
             display.redraw();
         }
-    }
+    } // end of rewind()
 
     public void updateBoard() {
         currentFrame++;
@@ -185,7 +185,7 @@ public class Controller {
         visualize();
         updateFrameCounter();
         display.redraw();
-    }
+    } // end of updateBoard()
 
     public void saveBoard() {
         FileChooser chooser = new FileChooser();

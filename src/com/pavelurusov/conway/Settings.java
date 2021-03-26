@@ -10,7 +10,7 @@ public final class Settings {
     public final Color COLOR_DEAD = Color.WHITE;
     public final Color COLOR_ALIVE = Color.BLACK;
     public final Color COLOR_GRID = Color.LIGHTGRAY;
-    public final double INTERVAL = 2e8;
+    public final double INTERVAL = 1e8;
     public final int SIZE = 12;
 
     public static Settings getInstance() {
