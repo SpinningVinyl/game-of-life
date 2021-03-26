@@ -1,5 +1,7 @@
 # Conway’s game of life
 
+![Main window](conway.png)
+
 This is a very basic implementation of Conway's game of life, written in Java.
 
 ### License
